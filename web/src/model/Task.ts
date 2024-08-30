@@ -6,6 +6,7 @@ export default class Task {
     description: string;
     persona: string;
     group: number;
+    inprogress: boolean;
     completed: boolean;
   
     constructor(id: number, title: string, description: string, persona: string, group: number, completed: boolean = false) {
@@ -14,6 +15,7 @@ export default class Task {
       this.description = description;
       this.persona = persona;
       this.group = group;
+      this.inprogress = false;
       this.completed = completed;
     }
   }
