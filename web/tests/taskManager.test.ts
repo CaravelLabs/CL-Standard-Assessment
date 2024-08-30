@@ -1,6 +1,6 @@
 // tests/taskManager.test.ts
 
-import { initializeTasks, getActiveTasks, completeTask, getCompletedTasks, getAllTasks, createTask, updateTask, deleteTask } from "@/modules/taskManager";
+import { initializeTasks, getActiveTasks, completeTask, getCompletedTasks, getAllTasks, createTask, updateTask, deleteTask, getPendingTasks, scheduleTask } from "@/modules/taskManager";
 
 
 
@@ -33,11 +33,34 @@ describe('Task Manager', () => {
   });
 
   test('should fetch active tasks', () => {
+    completeTask('Initial Setup');
+    completeTask('Basic Introduction');
+    scheduleTask(3);
+    scheduleTask(4);
     const activeTasks = getActiveTasks();
+  
     expect(activeTasks).toEqual(
-      [{"completed": false, "description": "Learn basic Git commands.", "group": 2, "id": 3, "persona": "Intern", "title": "Basic Git"}, {"completed": false, "description": "Collaborate on a Git repository.", "group": 2, "id": 4, "persona": "Intern", "title": "Git Collaboration"}])
-      
-    ;
+        [ {
+              id: 3,
+              title: "Basic Git",
+              description: "Learn basic Git commands.",
+              persona: "Intern",
+              group: 2,
+              inprogress: true,
+              completed: false
+          },
+          {
+              id: 4,
+              title: "Git Collaboration",
+              description: "Collaborate on a Git repository.",
+              persona: "Intern",
+              group: 2,
+              inprogress: true,
+              completed: false,
+          }
+        ]
+      )
+
   });
 
   test('should fetch all tasks', () => {
@@ -71,23 +94,23 @@ describe('Task Manager', () => {
 
   test('should create a new task', () => {
     createTask('New Task', 'New task description', 'Intern', 1);
-    const activeTasks = getActiveTasks();
-    expect(activeTasks).toContainEqual(
+    const pendingTasks = getPendingTasks();
+    expect(pendingTasks).toContainEqual(
       expect.objectContaining({ title: 'New Task' })
     );
   });
 
   test('should update a task', () => {
-    const taskToUpdate = getActiveTasks()[0];
+    const taskToUpdate = getPendingTasks()[0];
     updateTask(taskToUpdate.id, { title: 'Updated Task Title' });
     const updatedTask = getAllTasks().find(task => task.id === taskToUpdate.id);
     expect(updatedTask?.title).toBe('Updated Task Title');
   });
 
   test('should delete a task', () => {
-    const taskToDelete = getActiveTasks()[0];
+    const taskToDelete = getPendingTasks()[0];
     deleteTask(taskToDelete.id);
-    const activeTasks = getActiveTasks();
+    const activeTasks = getPendingTasks();
     expect(activeTasks).not.toContainEqual(
       expect.objectContaining({ id: taskToDelete.id })
     );
