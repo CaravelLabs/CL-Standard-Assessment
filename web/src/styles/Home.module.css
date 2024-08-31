@@ -104,6 +104,14 @@
   transform: translateZ(0);
 }
 
+/* In your CSS or styles */
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+
 .logo {
   position: relative;
 }
