@@ -19,16 +19,7 @@ export function initializeTasks() {
 
 // Fetch tasks that are currently active
 export function getActiveTasks(): Task[] {
-  const activeTasks = tasks.filter(task => task.isActive && !task.completed);
-    
-    // Ensure only the first task is active, deactivate the others
-    if (activeTasks.length > 1) {
-        activeTasks.forEach((task, index) => {
-            task.isActive = index === 0; // Only the first task remains active
-        });
-    }
-
-    return activeTasks;
+  return tasks.filter(task => task.isActive && !task.completed);
 }
 
 // Fetch tasks that are completed
